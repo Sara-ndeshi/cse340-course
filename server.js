@@ -13,6 +13,11 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 
+// Set EJS as the templating engine
+app.set('view engine', 'ejs');
+
+// Tell Express where to find your templates
+app.set('views', path.join(__dirname, 'src/views'));
 /**
   * Configure Express middleware
   */
