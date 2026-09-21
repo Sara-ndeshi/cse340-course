@@ -3,6 +3,7 @@ import { fileURLToPath } from 'url';
 import path from 'path';
 import { testConnection } from './src/models/db.js';
 import { getAllOrganizations } from './src/models/organizations.js';
+import { getAllProjects } from './src/models/projects.js';
 
 // Define the application environment
 const NODE_ENV = process.env.NODE_ENV?.toLowerCase() || 'production';
@@ -43,8 +44,18 @@ app.get('/organizations', async (req, res) => {
 });
 
 app.get('/projects', async (req, res) => {
-    const title = 'Service Projects';
-    res.render('projects', { title });
+    try {
+        const projectsData = await getAllProjects();
+
+        // Render the view and pass the data object down
+        res.render('projects', {
+            title: 'Available Service Projects',
+            projects: projectsData
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Server Error loading projects.');
+    }
 });
 
 app.get('/categories', async (req, res) => {
