@@ -75,3 +75,46 @@ VALUES
 (3, 'River Clean-Up Initiative', 'Clearing plastic waste and debris from the riverbank trail.', 'Waterford River Park', '2026-11-05'),
 (3, 'Warm Coats Sorting Drive', 'Inspecting, sizing, and packing winter coat donations.', 'Unity Hall Gym', '2026-11-19'),
 (3, 'Holiday Toy Wrap Event', 'Wrapping and labeling gift donations for local families.', 'Civic Center Hall Room 4', '2026-12-05');
+
+-- ========================================
+-- 1. Create Categories Table
+-- ========================================
+CREATE TABLE IF NOT EXISTS category (
+    category_id SERIAL PRIMARY KEY,
+    category_name VARCHAR(100) NOT NULL UNIQUE
+);
+
+-- ========================================
+-- 2. Create Project-Category Junction Table (M:N)
+-- ========================================
+CREATE TABLE IF NOT EXISTS project_category (
+    project_id INTEGER NOT NULL,
+    category_id INTEGER NOT NULL,
+    PRIMARY KEY (project_id, category_id),
+    CONSTRAINT fk_project FOREIGN KEY (project_id) REFERENCES project (project_id) ON DELETE CASCADE,
+    CONSTRAINT fk_category FOREIGN KEY (category_id) REFERENCES category (category_id) ON DELETE CASCADE
+);
+
+-- ========================================
+-- 3. Insert 3 Sample Categories
+-- ========================================
+INSERT INTO category (category_name)
+VALUES 
+('Environmental & Sustainability'),
+('Community Infrastructure'),
+('Education & Social Support')
+ON CONFLICT (category_name) DO NOTHING;
+
+-- ========================================
+-- 4. Associate Existing Projects with Categories
+-- ========================================
+-- This maps your 15 existing projects to at least one category mapping
+INSERT INTO project_category (project_id, category_id)
+VALUES
+-- BrightFuture Builders Projects (IDs 1-5) -> Infrastructure & Environment
+(1, 2), (2, 1), (3, 2), (4, 2), (5, 2),
+-- GreenHarvest Growers Projects (IDs 6-10) -> Environmental & Sustainability
+(6, 1), (7, 1), (8, 1), (9, 1), (10, 1),
+-- UnityServe Volunteers Projects (IDs 11-15) -> Education & Social Support
+(11, 3), (12, 3), (13, 1), (14, 3), (15, 3)
+ON CONFLICT DO NOTHING;

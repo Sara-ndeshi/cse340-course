@@ -1,15 +1,18 @@
 <%- include('partials/header') %>
-
     <main>
-        <h2>Service Project Categories</h2>
-        <p>Explore the different types of service projects we support:</p>
+        <h1>
+            <%= title %>
+        </h1>
+        <p>Browse our service opportunities by focus area:</p>
 
         <ul>
-            <li>Environmental</li>
-            <li>Educational</li>
-            <li>Community Service</li>
-            <li>Health and Wellness</li>
+            <% categories.forEach(category=> { %>
+                <li>
+                    <strong>
+                        <%= category.category_name %>
+                    </strong>
+                    </td>
+                    <% }); %>
         </ul>
     </main>
-
     <%- include('partials/footer') %>
